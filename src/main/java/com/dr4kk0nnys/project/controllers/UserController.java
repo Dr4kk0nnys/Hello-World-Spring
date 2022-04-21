@@ -1,10 +1,12 @@
 package com.dr4kk0nnys.project.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 import com.dr4kk0nnys.project.models.User;
+import com.dr4kk0nnys.project.services.UsersRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,45 +18,44 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    private Map<String, User> users = new HashMap<>();
+    @Autowired
+    private UsersRepository usersRepository;
 
-    @PostMapping("users/create-user")
-    public User createUser(@RequestBody User user) {
-
-        User newUser = new User(user);
-        // users.put(newUser.getEmail(), newUser);
-        // database.insert(
-        // "INSERT INTO users VALUES ('Dr4kk0nnys Shinigami', 'ddrakk100@gmail.com',
-        // '12345')");
-        System.out.println("New user created: " + newUser.getName());
-
-        return newUser;
+    @GetMapping("users/get-users")
+    public List<User> getUsers(User user) {
+        List<User> users = usersRepository.findAll();
+        return users;
     }
 
     @GetMapping("users/get-user")
-    public User getUser(@RequestParam String email) {
-        return users.get(email);
+    public Optional<User> getUser(@RequestParam Integer id) {
+        return usersRepository.findById(id);
+    }
+
+    @PostMapping("users/create-user")
+    public User createUser(@RequestBody User user) {
+        User newUser = usersRepository.save(user);
+        return newUser;
     }
 
     @PutMapping("users/update-user")
-    public User updateUser(@RequestParam String email, @RequestBody User newUser) {
-        User user = this.getUser(email);
+    public Optional<User> updateUser(@RequestParam Integer id, @RequestBody User newUser) throws Exception {
+        Optional<User> user = usersRepository.findById(id);
 
-        if (user == null) {
-            return null;
+        if (!user.isPresent()) {
+            throw new Exception("User not found");
         }
 
-        user.setName(newUser.getName());
-        user.setEmail(newUser.getEmail());
-        user.setPassword(newUser.getPassword());
-
-        users.put(user.getEmail(), user);
+        newUser.setId(user.get().getId());
+        usersRepository.save(newUser);
 
         return user;
     }
 
     @DeleteMapping("users/delete-user")
-    public User deleteUser(@RequestParam String email) {
-        return users.remove(email);
+    public User deleteUser(@RequestParam Integer id) {
+        Optional<User> user = usersRepository.findById(id);
+        usersRepository.delete(user.get());
+        return user.get();
     }
 }
