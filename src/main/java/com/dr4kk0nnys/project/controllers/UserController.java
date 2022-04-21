@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.dr4kk0nnys.project.models.User;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,5 +48,10 @@ public class UserController {
         users.put(user.getEmail(), user);
 
         return user;
+    }
+
+    @DeleteMapping("users/delete-user")
+    public User deleteUser(@RequestParam String email) {
+        return users.remove(email);
     }
 }
