@@ -2,12 +2,12 @@ package com.dr4kk0nnys.project.models;
 
 public class User {
 
-    private String fullName;
+    private String name;
     private String email;
     private String password;
 
     public User(User user) {
-        this.fullName = user.fullName;
+        this.name = user.name;
         this.email = user.email;
         this.password = user.password;
     }
@@ -19,8 +19,8 @@ public class User {
         return email;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
     public String getPassword() {
@@ -31,8 +31,8 @@ public class User {
         this.email = email;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPassword(String password) {

@@ -22,8 +22,11 @@ public class UserController {
     public User createUser(@RequestBody User user) {
 
         User newUser = new User(user);
-        System.out.println("New user created: " + newUser.getFullName());
-        users.put(newUser.getEmail(), newUser);
+        // users.put(newUser.getEmail(), newUser);
+        // database.insert(
+        // "INSERT INTO users VALUES ('Dr4kk0nnys Shinigami', 'ddrakk100@gmail.com',
+        // '12345')");
+        System.out.println("New user created: " + newUser.getName());
 
         return newUser;
     }
@@ -41,7 +44,7 @@ public class UserController {
             return null;
         }
 
-        user.setFullName(newUser.getFullName());
+        user.setName(newUser.getName());
         user.setEmail(newUser.getEmail());
         user.setPassword(newUser.getPassword());
 
